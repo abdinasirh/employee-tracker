@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.3"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "employee-tracker",
+  "description": "employee tracker",
+  "version": "1.0.0",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdinasirh/employee-tracker.git"
+  },
+  "keywords": [
+    "employee",
+    "tracker"
+  ],
+  "author": "Abdinasir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abdinasirh/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/abdinasirh/employee-tracker#readme"
+}
