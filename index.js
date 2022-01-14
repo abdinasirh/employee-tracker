@@ -2,6 +2,7 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const consoleTable = require("console.table");
 const db = require("./lib/queries");
+const { addDepartment, connection } = require("./lib/queries");
 //const connection = require('./db/connection');
 
 const questions = [
@@ -65,7 +66,7 @@ function actions() {
         break;
 
       case "add_department":
-        addDepartment();
+        addByDepartment();
         break;
 
       case "add_role":
@@ -96,12 +97,36 @@ function findDepartments() {
 
 
 function findRoles() {
-    
+    db.viewAllRoles()
+    .then(([roles]) => {
+
+       console.table(roles);
+    })
+    .then(() => actions());
+
 }
 
-function findEmployees() {}
+function findEmployees() {
+    db.viewAllEmployees()
+    .then(([employees]) => {
 
-function addDepartment() {}
+       console.table(employees);
+    })
+    .then(() => actions());
+}
+
+function addByDepartment() {
+    inquirer.prompt([{
+        type: "input",
+        name: "department",
+        message: "What department would like to add?"
+        
+    }]).then(function(data){
+        connection.query('INSERT INTO department(name) VALUES(?)', [data.department])
+        actions();
+    })
+
+}
 
 function addRole() {}
 
