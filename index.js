@@ -191,6 +191,7 @@ function addEmployee() {
       ]);
     })
     .then(function (data) {
+        console.log(data)
       connection.query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
         [name.first_name, name.last_name, name.role_id, name.manager_id]
