@@ -127,70 +127,77 @@ function addByDepartment() {
 }
 
 function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "role_name",
+        message: "What role would you like to add?",
+      },
 
-    var roles = db.viewAllRoles()
-     
-
-    var roleOptions = roles.map((role) => {
-    return {name: role.name, value: role.id}
-    });
-
-  inquirer.prompt([
-    {
-      type: "input",
-      name: "role_name",
-      message: "What role would you like to add?",
-    },
-
-    {
-      type: "input",
-      name: "salary",
-      message: "What is the salary for this role?",
-    },
-    {
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary for this role?",
+      },
+      {
         type: "list",
-        name: "role",
-        message: "What role should the employee have?",
-        choices: roleOptions
-      }
-  ]).then(function (data) {
-    connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [
-      data.role_name, data.salary, data.role
-    ]);
-    console.table(data);
-    actions();
-  });
+        name: "department",
+        message: "What department does the role belong to?",
+        choices: ["IT", "Finance", "Security", "Networking", "HR"],
+      },
+    ])
+    .then(function (data) {
+      connection.query(
+        "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
+        [data.role_name, data.salary, data.choices]
+      );
+      console.table(data);
+      actions();
+    });
 }
 
 function addEmployee() {
+  db.viewAllRoles()
+    .then((roles) => {
+      //put the code I gave you here, including the inquirer prompt.
+      var roleOptions = roles.map((role) => {
+        return { name: role.name, value: role.id };
+      });
 
-
-    inquirer.prompt([
-        
+      inquirer.prompt([
         {
           type: "input",
           name: "first_name",
           message: "What is the first name of the employee?",
         },
-    
+
         {
           type: "input",
           name: "last_name",
           message: "What is the last name of the employee?",
         },
-       
         {
-            type: "input",
-            name: "manager",
-            message: "who is the employee manager?",
-          }
-      ]).then(function (data) {
-        connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [
-          data.first_name, data.last_name, data.role_id, data.manager_id
-        ]);
-        console.table(data);
-        actions();
-      });
+          type: "list",
+          name: "role",
+          message: "What role should the employee have?",
+          choices: roleOptions,
+        },
+        {
+          type: "input",
+          name: "manager",
+          message: "who is the employee manager?",
+        },
+      ]);
+    })
+    .then(function (data) {
+      connection.query(
+        "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
+        [data.first_name, data.last_name, data.role_id, data.manager_id]
+      );
+      console.table(data);
+      actions();
+    });
 }
 
 function updateEmployee() {}
