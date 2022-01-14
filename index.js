@@ -127,6 +127,14 @@ function addByDepartment() {
 }
 
 function addRole() {
+
+    var roles = db.viewAllRoles()
+     
+
+    var roleOptions = roles.map((role) => {
+    return {name: role.name, value: role.id}
+    });
+
   inquirer.prompt([
     {
       type: "input",
@@ -140,14 +148,14 @@ function addRole() {
       message: "What is the salary for this role?",
     },
     {
-      type: "list",
-      name: "department",
-      message: "What department does the role belong to?",
-      choices: ["IT", "Finance", "Security", "Networking", "HR"]
-    }
+        type: "list",
+        name: "role",
+        message: "What role should the employee have?",
+        choices: roleOptions
+      }
   ]).then(function (data) {
     connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [
-      data.role_name, data.salary, data.choices
+      data.role_name, data.salary, data.role
     ]);
     console.table(data);
     actions();
@@ -155,7 +163,10 @@ function addRole() {
 }
 
 function addEmployee() {
+
+
     inquirer.prompt([
+        
         {
           type: "input",
           name: "first_name",
@@ -167,15 +178,11 @@ function addEmployee() {
           name: "last_name",
           message: "What is the last name of the employee?",
         },
-        {
-          type: "input",
-          name: "role_id",
-          message: "What is the employee role id?",
-        },
+       
         {
             type: "input",
-            name: "manager_id",
-            message: "What is the employee manager id?",
+            name: "manager",
+            message: "who is the employee manager?",
           }
       ]).then(function (data) {
         connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [
