@@ -188,17 +188,17 @@ function addEmployee() {
           name: "manager",
           message: "who is the employee manager?",
         },
-      ]);
-    })
+    ])
     .then(function (data) {
         console.log(data)
       connection.query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
-        [name.first_name, name.last_name, name.role_id, name.manager_id]
+        [data.first_name, data.last_name, data.role_id, data.manager_id]
       );
       console.table(data);
       actions();
     });
+    })
 }
 
 function updateEmployee() {}
