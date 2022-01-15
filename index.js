@@ -158,13 +158,7 @@ function addRole() {
 }
 
 function addEmployee() {
-  db.viewAllRoles()
-    .then((roles) => {
-      //put the code I gave you here, including the inquirer prompt.
-      var roleOptions = roles.map((role) => {
-        return { name: role.name, value: role.id };
-      });
-
+    
       inquirer.prompt([
         {
           type: "input",
@@ -178,29 +172,52 @@ function addEmployee() {
           message: "What is the last name of the employee?",
         },
         {
-          type: "list",
-          name: "role",
-          message: "What role should the employee have?",
-          choices: roleOptions,
+            type: "input",
+            name: "roleId",
+            message: "What is the employees role ID"
         },
         {
-          type: "input",
-          name: "manager",
-          message: "who is the employee manager?",
-        },
+            type: "input",
+            name: "managerId",
+            message: "What is the employees manager's ID?"
+        }
     ])
     .then(function (data) {
         console.log(data)
       connection.query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
-        [data.first_name, data.last_name, data.role_id, data.manager_id]
+        [data.first_name, data.last_name, data.roleId, data.managerId]
       );
       console.table(data);
       actions();
     });
-    })
+
 }
 
-function updateEmployee() {}
+function updateEmployee() {
+    inquirer.prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "Which employee would you like to update?",
+        },
+
+        {
+          type: "input",
+          name: "role_id",
+          message: "please provide new role id?",
+        }
+    ])
+    .then(function (data) {
+        console.log(data)
+      connection.query(
+        "UPDATE employee SET role_id = ? WHERE first_name = ?",
+        [data.role_id, data.name]
+      );
+      console.table(data);
+      actions();
+    });
+
+}
 
 function quit() {}
